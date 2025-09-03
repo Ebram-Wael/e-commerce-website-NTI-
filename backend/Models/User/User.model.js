@@ -24,34 +24,50 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "admin", "sales-man"],
         default: "user",
     },
 
 
 
-cart: {
-  type: {
-    items: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product"
-        },
-        quantity: {
-          type: Number,
-          default: 1
-        }
-      }
-    ]
-  },
-  required: function () {
-    return this.role === "user";
-  },
-  _id: false, 
-  default: { items: [] }
-}
+// cart: {
+//   type: {
+//     items: [
+//       {
+//         productId: {
+//           type: mongoose.Schema.Types.ObjectId,
+//           ref: "Product"
+//         },
+//         quantity: {
+//           type: Number,
+//           default: 1
+//         }
+//       }
+//     ]
+//   },
+//   required: function () {
+//     return this.role === "user";
+//   },
+//   _id: false, 
+//   default: { items: [] }
+// }
 
+   cart: {
+    items: [{
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      qunatity: {
+        type: Number,
+        required: true
+      }
+    }]
+    // default: {
+    //   items: []
+    // }
+  }
 }, {
     timestamps: true,
 });

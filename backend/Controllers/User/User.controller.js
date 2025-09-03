@@ -4,26 +4,41 @@ import productModel from '../../Models/Product/Product.model.js'
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
 
+import promisify from 'util'
+import { makeToken, makeRefreshToken } from '../../utils/token.js'
 
 /**
- * Create a new user in the system
- * 
+ * Register a new user (self-registration)
+ *
  * @function signUp
  * @author Hussien
  * @created 2025-09-03
- * @description This function creates a new user in the database after validating email and password.
- * 
- * @param {Object} req - Express request object
+ * @description Creates a new user account in the system after validating email and password.
+ *              - Regular users can self-register.
+ *              - Sales-man cannot self-register (must be created by an Admin).
+ *              - Admins can register themselves.
+ *
+ * @param {Object} req - Express request object containing user data in req.body
  * @param {Object} res - Express response object
- * @returns {Promise<void>} Sends JSON response
- * 
+ * @returns {Promise<void>} JSON response with user data or error details
+ *
  * @response {201} Created - User created successfully with new user data.
  * @response {400} Bad Request - Validation error on email or password.
  * @response {400} Bad Request - Duplicate email detected.
+ * @response {401} Unauthorized - Sales-man attempted self-registration.
  */
+
 export const signUp = async (req, res) => {
      let user = req.body;
-     
+     if(req.body.role === "sales-man")
+     {
+       return res.status(401).json({ message: 'unauthorized to make account so ask admin'});
+
+     }
+     if(req.body.role === 'sales-man--')
+     {
+        req.body.role = 'sales-man';
+     }
 
     try {
     let newUser = await usersModel.create(user);
@@ -55,21 +70,23 @@ export const signUp = async (req, res) => {
 
 
 /**
- * Update an existing user in the system
- * 
+ * Update an existing user
+ *
  * @function updateUser
- * @author Hussien
- * @created 2025-09-03
- * @description This function updates user information based on the provided ID.
- * 
- * @param {Object} req - Express request object
+ * @description Updates user information (name, email, password, etc.) by user ID.
+ *              - Accessible to Admins (can update any user).
+ *              - Accessible to Users (can only update their own profile, depending on middleware).
+ *
+ * @param {Object} req - Express request object with user data in req.body and user ID in req.params.id
  * @param {Object} res - Express response object
- * @returns {Promise<void>} Sends JSON response
- * 
- * @response {201} Created - User updated successfully with updated user data.
- * @response {404} Not Found - User with the given ID was not found.
- * @response {500} Internal Server Error - Unexpected error while updating user.
+ * @returns {Promise<void>} JSON response with updated user data or error message
+ *
+ * @response {201} Success - User updated successfully.
+ * @response {404} Not Found - User with the given ID does not exist.
+ * @response {500} Internal Server Error - Unexpected server error.
  */
+
+
 export const updateUser = async (req, res) => {
     let user = req.body;
     let {id} = req.params;
@@ -94,21 +111,21 @@ export const updateUser = async (req, res) => {
 
 
 /**
- * Delete an admin user from the system
+ * Delete an Admin account
  *
  * @function deleteAdmin
- * @author Hussien
- * @created 2025-09-03
- * @description This function deletes an admin by ID and removes their products.
+ * @description Deletes an admin user by ID and removes all products created by that admin.
+ *              - Accessible only to Admins.
  *
- * @param {Object} req - Express request object
+ * @param {Object} req - Express request object with user ID in req.params.id
  * @param {Object} res - Express response object
- * @returns {Promise<void>} Sends JSON response
+ * @returns {Promise<void>} No content if successful
  *
  * @response {204} No Content - Admin and related products deleted successfully.
- * @response {404} Not Found - Admin with given ID does not exist.
- * @response {500} Internal Server Error - Something went wrong on the server.
+ * @response {404} Not Found - Admin with the given ID does not exist.
+ * @response {500} Internal Server Error - Unexpected server error.
  */
+
 export const deleteAdmin = async (req, res) => {
      const {id} = req.params;
       res.send(`DELETE admin with id ${req.params.id}`);
@@ -141,21 +158,22 @@ export const deleteAdmin = async (req, res) => {
 
 
 /**
- * Delete a regular user from the system
+ * Delete a Regular User account
  *
  * @function deleteUser
- * @author Hussien
- * @created 2025-09-03
- * @description This function deletes a user by ID only if the role is "user".
+ * @description Deletes a regular user account by ID.
+ *              - Accessible only to Admins.
+ *              - Does not delete products (since regular users don't own products in this design).
  *
- * @param {Object} req - Express request object
+ * @param {Object} req - Express request object with user ID in req.params.id
  * @param {Object} res - Express response object
- * @returns {Promise<void>} Sends JSON response
+ * @returns {Promise<void>} No content if successful
  *
  * @response {204} No Content - User deleted successfully.
  * @response {404} Not Found - User with the given ID does not exist.
- * @response {500} Internal Server Error - Unexpected error occurred.
+ * @response {500} Internal Server Error - Unexpected server error.
  */
+
 export const deleteUser = async (req, res) => {
   const { id } = req.params;
 
@@ -174,6 +192,171 @@ export const deleteUser = async (req, res) => {
   }
 };
 
+
+
+/**
+ * Create a new Sales-Man account (Admin only)
+ *
+ * @function createSalesMan
+ * @description Allows Admins to create sales-man accounts. 
+ *              Internally calls signUp() after forcing role = "sales-man".
+ *
+ * @param {Object} req - Express request object containing user data in req.body
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response with created sales-man data
+ *
+ * @response {201} Created - Sales-man created successfully.
+ * @response {403} Forbidden - Non-admin tried to create a sales-man.
+ */
+
+export const createSalesMan = async (req, res) => {
+  
+  req.body.role = "sales-man--";
+  return signUp(req, res);
+};
+
+
+
+
+
+
+
+/**
+ * User Login
+ *
+ * @function login
+ * @description Authenticates a user with email and password.
+ *              - Verifies credentials.
+ *              - Generates an access token and a refresh token.
+ *              - Saves the refresh token in the database.
+ *
+ * @param {Object} req - Express request object containing { email, password }
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response with JWT tokens or error message
+ *
+ * @response {201} Success - Returns token and refresh token.
+ * @response {400} Bad Request - Missing email or password.
+ * @response {401} Unauthorized - Invalid email or password.
+ * @response {404} Not Found - User not found.
+ */
+
+
+export const login = async (req, res) =>
+{
+
+    let {email, password} = req.body;
+
+    if(!email || !password)
+    {
+      return  res.status(400).json({
+            message: "you must provide email and password"
+        });
+
+    }
+
+    let user = await usersModel.findOne({email: email});
+
+    if(!user)
+    {
+      return  res.status(404).json({
+            message: "This User Not Found"
+        });
+    }
+    let isVaild = await bcrypt.compare(password, user.password );
+
+    if(!isVaild)
+    {
+        return res.status(401).json({
+            message: "Invaild eamil or password"
+        });
+    }
+
+    let token = makeToken(user);
+    let refreshToken = makeRefreshToken(user);
+
+   await  usersModel.findOneAndUpdate({_id: user.id,}, {refreshToken: refreshToken});
+
+
+    res.status(201).json({
+        message: "Success",
+        token,
+        refreshToken
+    })
+
+}
+
+
+
+
+
+
+
+
+
+
+/**
+ * Refresh Access Token
+ *
+ * @function refreshToken
+ * @description Validates the provided refresh token and issues a new access token.
+ *              - Requires refresh token in req.body.
+ *              - Checks against stored refresh token in DB for security.
+ *
+ * @param {Object} req - Express request object containing { refreshToken }
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response with new access token
+ *
+ * @response {201} Success - New access token created.
+ * @response {400} Bad Request - Refresh token not provided.
+ * @response {403} Forbidden - Invalid or mismatched refresh token.
+ */
+
+export const refreshToken = async(req, res, next) =>
+{
+    let {refreshToken} = req.body;
+
+    if(!refreshToken)
+    {
+        return res.status(400).json({
+            message: "refreshToken is required"
+        });
+
+    }
+    
+
+     try{
+    let decode = await promisify(jwt.verify)(refreshToken, process.env.JWT_REFRESH_TOKEN_SECRET);
+
+     let user = await usersModel.findOne({_id: decode.id});
+
+     if(!user || user.refreshToken != refreshToken)
+     {
+        return res.status(403).json({
+            message: "invaild refreshToken"
+        });
+     }
+     else{
+        let token = makeToken(user);
+        res.status(201).json({
+        message: "Success",
+        token
+        
+            })
+
+     }
+
+     }
+     catch(error)
+     {
+        res.status(403).json({
+            message:"Bad Request"
+        })
+
+     }
+    
+
+
+}
 
 
 
