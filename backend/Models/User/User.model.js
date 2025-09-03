@@ -30,24 +30,30 @@ const userSchema = new mongoose.Schema({
 
 
 
-    cart: {
-        items: [{
-            productId: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "Product"
-            },
-            quantity: Number
-        }]
-       ,
-       required: function () {
-        return this.role === "user";
-       } 
-    }
+cart: {
+  type: {
+    items: [
+      {
+        productId: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: "Product"
+        },
+        quantity: {
+          type: Number,
+          default: 1
+        }
+      }
+    ]
+  },
+  required: function () {
+    return this.role === "user";
+  },
+  default: { items: [] }
+}
+
 }, {
     timestamps: true,
 });
-
-const User = mongoose.model("User", userSchema);
 
 userSchema.pre('save', async function (){
     let salt = await bcrypt.genSalt(10);
@@ -56,6 +62,10 @@ userSchema.pre('save', async function (){
     this.password = hashedPassword;
     
 })
+
+const User = mongoose.model("User", userSchema);
+
+
 
 
 

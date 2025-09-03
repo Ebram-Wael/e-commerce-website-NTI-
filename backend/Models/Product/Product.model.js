@@ -1,6 +1,6 @@
-import connectDB from "../../utils/db";
+import mongoose from "mongoose"
 
-const productSchema = new connectDB.Schema({
+const productSchema = new mongoose.Schema({
     title: {
         type: String,
         required: true
@@ -19,6 +19,6 @@ const productSchema = new connectDB.Schema({
     timestamps: true 
 });
 
-const productsModel = connectDB.model('Product', productSchema);
+const productsModel = mongoose.model('Product', productSchema);
 
-export default User;
+export default productsModel;
