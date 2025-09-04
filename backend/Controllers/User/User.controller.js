@@ -92,7 +92,7 @@ export const updateUser = async (req, res) => {
     let {id} = req.params;
     
     try {
-        let newUser = await usersModel.findByIdAndUpdate(id, {$set : user}, {new: true});
+      let newUser = await usersModel.findByIdAndUpdate(id, {$set : user}, {new: true});
 
     if (!user) return res.status(404).json({ message: 'user is Not Found' });
 
@@ -128,8 +128,11 @@ export const updateUser = async (req, res) => {
 
 export const deleteAdmin = async (req, res) => {
      const {id} = req.params;
-      res.send(`DELETE admin with id ${req.params.id}`);
     let user = await usersModel.findByIdAndDelete(id);
+
+
+
+  
 
 
 
