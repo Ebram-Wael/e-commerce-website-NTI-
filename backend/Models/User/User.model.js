@@ -4,6 +4,7 @@ import validator from 'validator'
 const userSchema = new mongoose.Schema({
   username: {
         type: String,
+        unique: true,
         required: true,
     },
   email: {
@@ -26,6 +27,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ["user", "admin", "sales-man"],
         default: "user",
+    },
+
+    phoneNumber: {
+      type: String
     },
 
 
@@ -73,7 +78,7 @@ const userSchema = new mongoose.Schema({
 });
 
 userSchema.pre('save', async function (){
-   if (this.role === "admin") {
+   if (this.role === "admin" || this.role === "sales-man") {
     this.cart = undefined; 
   }
     let salt = await bcrypt.genSalt(10);

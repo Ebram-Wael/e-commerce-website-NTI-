@@ -23,6 +23,7 @@ export const auth = async (req, res, next) => {
 
          
    req.role = decode.role;    
+   req.userId = decode.id;
 
    next();
     }

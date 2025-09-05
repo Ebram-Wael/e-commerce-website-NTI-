@@ -131,11 +131,6 @@ export const deleteAdmin = async (req, res) => {
     let user = await usersModel.findByIdAndDelete(id);
 
 
-
-  
-
-
-
     try{
       if(!user)
         {
