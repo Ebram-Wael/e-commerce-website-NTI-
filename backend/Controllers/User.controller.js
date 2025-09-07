@@ -64,6 +64,7 @@ export const signUp = async (req, res) => {
 /**
  * Update an existing user
  *
+ * @author Hussien
  * @function updateUser
  * @description Updates user information (name, email, password, etc.) by user ID.
  *              - Accessible to Admins (can update any user).
@@ -102,6 +103,10 @@ export const updateUser = async (req, res) => {
 /**
  * Delete an Admin account
  *
+<<<<<<< HEAD
+=======
+ * @author Hussien
+>>>>>>> hussien-updates
  * @function deleteAdmin
  * @description Deletes an admin user by ID and removes all products created by that admin.
  *              - Accessible only to Admins.
@@ -135,6 +140,7 @@ export const deleteAdmin = async (req, res) => {
 /**
  * Delete a Regular User account
  *
+ * @author Hussien
  * @function deleteUser
  * @description Deletes a regular user account by ID.
  *              - Accessible only to Admins.
@@ -170,6 +176,7 @@ export const deleteUser = async (req, res) => {
 /**
  * Create a new Sales-Man account (Admin only)
  *
+ * @author Hussien
  * @function createSalesMan
  * @description Allows Admins to create sales-man accounts.
  *              Internally calls signUp() after forcing role = "sales-man".
@@ -190,6 +197,10 @@ export const createSalesMan = async (req, res) => {
 /**
  * User Login
  *
+<<<<<<< HEAD
+=======
+ * @author Hussien
+>>>>>>> hussien-updates
  * @function login
  * @description Authenticates a user with email and password.
  *              - Verifies credentials.
@@ -248,6 +259,10 @@ export const login = async (req, res) => {
 /**
  * Refresh Access Token
  *
+<<<<<<< HEAD
+=======
+ * @author Hussien
+>>>>>>> hussien-updates
  * @function refreshToken
  * @description Validates the provided refresh token and issues a new access token.
  *              - Requires refresh token in req.body.
@@ -295,4 +310,139 @@ export const refreshToken = async (req, res, next) => {
       message: "Bad Request",
     });
   }
+};
+
+
+
+/**
+ * Get User Cart
+ *
+ * @author Hussien
+ * @function getCart
+ * @description Retrieves the current user's cart with populated product details.
+ *              - Requires authenticated user (`req.user`).
+ *              - Populates `cart.items.productId` with product info.
+ *
+ * @param {Object} req - Express request object with authenticated user in `req.user`.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} JSON response with the user's cart (products & total price).
+ *
+ * @response {200} Success - Cart retrieved successfully.
+ * @response {500} Internal Server Error - Failed to retrieve cart.
+ */
+
+export const getCart = async(req, res) => {
+  
+
+  try{
+    const user  = await req.user.populate('cart.items.productId');
+  
+  let products = user.cart.items;
+  let totalPrice = user.cart.totalPrice;
+
+  const uploadedCart = {
+    products,
+    totalPrice
+  }
+
+  return res.status(200).json({ message: "Cart Uploaded Successfully", data: uploadedCart });
+
+  }
+
+
+  catch(error){
+    return res.status(500).json({
+      message:"Failed To Upload Cart Some Error Happen"
+    })
+
+  }
+    
+    }
+     
+
+
+
+
+    /**
+ * Add Product to Cart
+ *
+ * @author Hussien
+ * @function addProductToCart
+ * @description Adds a product to the authenticated user's cart.
+ *              - Requires `productId` in `req.body`.
+ *              - If product exists in cart, increments its quantity and adjust price of product based on its quantity.
+ *              - Recalculates total price after addition.
+ *
+ * @param {Object} req - Express request object containing { productId } in body.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} JSON response with updated user document (cart).
+ *
+ * @response {200} Success - Product added to cart successfully.
+ * @response {500} Internal Server Error - Failed to add product to cart.
+ */
+export const addProductToCart = async(req, res) => {
+  
+  
+   try{
+    const prodId = req.body.productId;
+
+  const product = await productModel.findById(prodId);
+
+  const result = await req.user.addToCart(product);
+  return res.status(200).json({ message: "Product Added To Cart Successfully", data: result });
+
+
+
+
+   }
+    catch(error){
+    return res.status(500).json({
+      message:"Failed To Add Product To Cart Some Error Happen"
+    })
+
+  }
+
+};
+
+
+
+
+
+
+/**
+ * Delete Product from Cart
+ * 
+ * @author Hussien
+ * @function deleteProductFromCart
+ * @description Removes a specific product from the authenticated user's cart.
+ *              - Requires `productId` in `req.body`.
+ *              - Recalculates total price after removal.
+ *
+ * @param {Object} req - Express request object containing { productId } in body.
+ * @param {Object} res - Express response object.
+ * @returns {Promise<void>} JSON response with updated user document (cart).
+ *
+ * @response {200} Success - Product removed from cart successfully.
+ * @response {500} Internal Server Error - Failed to remove product from cart.
+ */
+
+export const deleteProductFromCart = async(req, res, next) => {
+  const prodId = req.body.productId;
+
+ 
+  try{
+
+  const result =  await req.user.removeFromCart(prodId);
+  return res.status(200).json({ message: "Remove Product From Cart Successfully", data: result });
+
+  }
+   catch(error){
+    return res.status(500).json({
+      message:"Failed To Remove from Cart Some Error Happen"
+    })
+
+  }
+
+ 
+    
 };
