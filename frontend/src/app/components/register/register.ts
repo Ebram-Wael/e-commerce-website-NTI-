@@ -8,4 +8,4 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
   templateUrl: './register.html'
 })
 export class RegisterComponent {
-  }
+}

@@ -68,6 +68,6 @@ router.patch("/:id", auth, restrictTo("user", "admin"), updateUser);
  * @description User/Admin registration (Sales-man blocked)
  * @access Public
  */
-router.post("/", signUp);
+router.post("/signup", signUp);
 
 export default router;
