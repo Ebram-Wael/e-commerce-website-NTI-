@@ -1,22 +1,23 @@
-import express from 'express';
-import dotenv from 'dotenv';
-import connectDB from './utils/db.js';
-
-import mongoose from 'mongoose';
-
-import usersRoutes from './Routes/User/user.route.js'
-
+import express from "express";
+import dotenv from "dotenv";
+import connectDB from "./utils/db.js";
+import cors from "cors";
+import usersRoutes from "./Routes/user.route.js";
+import productRoutes from "./Routes/product.route.js";
 
 const app = express();
 dotenv.config();
 
 app.use(express.json());
+app.use(cors());
 
-// app.get('/', (req, res) => {
-//     res.send('hello world');
-// });
 
-app.use('/users',usersRoutes);
+app.get('/', (req, res) => {
+    res.send('hello world');
+});
+
+app.use("/users", usersRoutes);
+app.use("/products", productRoutes);
 
 connectDB().then(() => {
   app.listen(process.env.PORT, () => {

@@ -1,22 +1,22 @@
-import jwt from 'jsonwebtoken'
-import { ref } from 'process';
+import jwt from "jsonwebtoken";
 
 
-export const makeToken = (user => {
-let token = jwt
-.sign({id: user.id, email: user.email, role: user.role}, 
-    process.env.JWT_SECRET, {expiresIn: '2h'});
+export const makeToken = (user) => {
+  let token = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    process.env.JWT_SECRET,
+    { expiresIn: "2h" }
+  );
 
-return token;    
+  return token;
+};
 
-});
+export const makeRefreshToken = (user) => {
+  let refreshToken = jwt.sign(
+    { id: user.id, email: user.email, role: user.role },
+    process.env.JWT_REFRESH_TOKEN_SECRET,
+    { expiresIn: "2d" }
+  );
 
-
-export const makeRefreshToken = (user => {
-    let refreshToken = jwt
-    .sign({id: user.id, email: user.email, role: user.role}, 
-        process.env.JWT_REFRESH_TOKEN_SECRET, {expiresIn: '2d'});
-    
-    return refreshToken;    
-
-})
+  return refreshToken;
+};
