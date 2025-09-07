@@ -4,6 +4,7 @@ import validator from 'validator'
 const userSchema = new mongoose.Schema({
   username: {
         type: String,
+        unique: true,
         required: true,
     },
   email: {
@@ -24,40 +25,60 @@ const userSchema = new mongoose.Schema({
     },
     role: {
         type: String,
-        enum: ["user", "admin"],
+        enum: ["user", "admin", "sales-man"],
         default: "user",
+    },
+
+    phoneNumber: {
+      type: String
     },
 
 
 
-cart: {
-  type: {
-    items: [
-      {
-        productId: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: "Product"
-        },
-        quantity: {
-          type: Number,
-          default: 1
-        }
-      }
-    ]
-  },
-  required: function () {
-    return this.role === "user";
-  },
-  _id: false, 
-  default: { items: [] }
-}
+// cart: {
+//   type: {
+//     items: [
+//       {
+//         productId: {
+//           type: mongoose.Schema.Types.ObjectId,
+//           ref: "Product"
+//         },
+//         quantity: {
+//           type: Number,
+//           default: 1
+//         }
+//       }
+//     ]
+//   },
+//   required: function () {
+//     return this.role === "user";
+//   },
+//   _id: false, 
+//   default: { items: [] }
+// }
 
+   cart: {
+    items: [{
+      productId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Product',
+        required: true
+      },
+      qunatity: {
+        type: Number,
+        required: true
+      }
+    }]
+    // default: {
+    //   items: []
+    // }
+  }
 }, {
     timestamps: true,
 });
 
 userSchema.pre('save', async function (){
-   if (this.role === "admin") {
+   if (this.role === "admin" || this.role === "sales-man") {
     this.cart = undefined; 
   }
     let salt = await bcrypt.genSalt(10);
