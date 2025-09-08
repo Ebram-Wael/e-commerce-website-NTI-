@@ -11,3 +11,6 @@ PORT = 3000
 MONGO_URI = 'mongodb://localhost:27017/ecommerceDB'
 JWT_SECRET = 'myJsonwebTokenSecret'
 JWT_REFRESH_TOKEN_SECRET = 'myJsonwebTokenRefreshSecret'
+CLOUDINARY_CLOUD_NAME=dqavuojks
+CLOUDINARY_API_KEY=736267146925122
+CLOUDINARY_API_SECRET=jCxbpIt4vt3G8l78x0fqXcAUbuI

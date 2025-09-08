@@ -1,89 +1,130 @@
-<section class="vh-100" style="background-color: #eee;">
-  <div class="container h-100">
-    <div class="row d-flex justify-content-center align-items-center h-100">
-      <div class="col-lg-12 col-xl-11">
-        <div class="card text-black" style="border-radius: 25px;">
-          <div class="card-body p-md-5">
-            <div class="row justify-content-center">
-              <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
+<section class="min-vh-100 d-flex align-items-center bg-light">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-10 col-xl-9">
+        <div class="card shadow-lg border-0 rounded-4">
+          <div class="card-body p-5">
+            <div class="row g-4 align-items-center">
 
-                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
-                  Sign up
-                </p>
+              <div class="col-md-10 col-lg-6 order-2 order-lg-1">
+                <h1 class="text-center fw-bold mb-4">Sign up</h1>
 
-                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mx-1 mx-md-4">
-
-                  <!-- Name -->
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <input type="text" id="formName" class="form-control" formControlName="name" />
-                      <label class="form-label" for="formName">Your Name</label>
-                      @if (registerForm.controls['name'].invalid && registerForm.controls['name'].touched) {
-                        <div class="text-danger">Name is required (min 3 chars).</div>
-                      }
-                    </div>
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+                  
+                  <div class="mb-3">
+                    <label for="formName" class="form-label">
+                      <i class="fas fa-user me-2"></i> Your Name
+                    </label>
+                    <input
+                      type="text"
+                      id="formName"
+                      class="form-control"
+                      formControlName="username"
+                    />
+                    @if (registerForm.controls['username'].invalid && registerForm.controls['username'].touched) {
+                      <div class="text-danger small mt-1">
+                        Name is required (min 4 chars).
+                      </div>
+                    }
                   </div>
 
-                  <!-- Email -->
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <input type="email" id="formEmail" class="form-control" formControlName="email" />
-                      <label class="form-label" for="formEmail">Your Email</label>
-                      @if (registerForm.controls['email'].invalid && registerForm.controls['email'].touched) {
-                        <div class="text-danger">Enter a valid email.</div>
-                      }
-                    </div>
+                  <div class="mb-3">
+                    <label for="formEmail" class="form-label">
+                      <i class="fas fa-envelope me-2"></i> Your Email
+                    </label>
+                    <input
+                      type="email"
+                      id="formEmail"
+                      class="form-control"
+                      formControlName="email"
+                    />
+                    @if (registerForm.controls['email'].invalid && registerForm.controls['email'].touched) {
+                      <div class="text-danger small mt-1">Enter a valid email.</div>
+                    }
                   </div>
 
-                  <!-- Password -->
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <input type="password" id="formPassword" class="form-control" formControlName="password" />
-                      <label class="form-label" for="formPassword">Password</label>
-                      @if (registerForm.controls['password'].invalid && registerForm.controls['password'].touched) {
-                        <div class="text-danger">Password must be at least 6 characters.</div>
-                      }
-                    </div>
+                  <div class="mb-3">
+                    <label for="formPassword" class="form-label">
+                      <i class="fas fa-lock me-2"></i> Password
+                    </label>
+                    <input
+                      type="password"
+                      id="formPassword"
+                      class="form-control"
+                      formControlName="password"
+                    />
+                    @if (registerForm.controls['password'].invalid && registerForm.controls['password'].touched) {
+                      <div class="text-danger small mt-1">
+                        Password must be at least 10 characters.
+                      </div>
+                    }
                   </div>
 
-                  <!-- Confirm Password -->
-                  <div class="d-flex flex-row align-items-center mb-4">
-                    <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                    <div class="form-outline flex-fill mb-0">
-                      <input type="password" id="formConfirm" class="form-control" formControlName="confirmPassword" />
-                      <label class="form-label" for="formConfirm">Repeat your password</label>
-                      @if (registerForm.controls['confirmPassword'].invalid && registerForm.controls['confirmPassword'].touched) {
-                        <div class="text-danger">Please confirm your password.</div>
-                      }
-                    </div>
+                  <div class="mb-3">
+                    <label for="formConfirm" class="form-label">
+                      <i class="fas fa-key me-2"></i> Repeat your password
+                    </label>
+                    <input
+                      type="password"
+                      id="formConfirm"
+                      class="form-control"
+                      formControlName="confirmPassword"
+                    />
+                    @if (registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched) {
+                      <div class="text-danger small mt-1">Please confirm your password.</div>
+                    }
+                    @if (registerForm.controls['confirmPassword'].errors?.['mismatch'] && registerForm.controls['confirmPassword'].touched) {
+                      <div class="text-danger small mt-1">Passwords do not match.</div>
+                    }
                   </div>
 
-                  <!-- Checkbox -->
-                  <div class="form-check d-flex justify-content-center mb-5">
-                    <input class="form-check-input me-2" type="checkbox" id="formAgree" formControlName="agree" />
+                  <div class="form-check mb-4">
+                    <input
+                      class="form-check-input"
+                      type="checkbox"
+                      id="formAgree"
+                      formControlName="agree"
+                    />
                     <label class="form-check-label" for="formAgree">
                       I agree to all statements in <a href="#">Terms of service</a>
                     </label>
                     @if (registerForm.controls['agree'].invalid && registerForm.controls['agree'].touched) {
-                      <div class="text-danger ms-2">You must agree before registering.</div>
+                      <div class="text-danger small mt-1">You must agree before registering.</div>
                     }
                   </div>
 
-                  <!-- Submit -->
-                  <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="registerForm.invalid">
-                      Register
+                  <div class="d-grid">
+                    @if(errorMessage != "") {
+                      <div class="alert alert-danger" role="alert">
+                        {{ errorMessage }}
+                      </div>
+                    }
+                    <button
+                      type="submit"
+                      class="btn btn-primary btn-lg"
+                      [disabled]="registerForm.invalid || isLoading"
+                    >
+                      @if(isLoading) {
+                        <span
+                          class="spinner-border spinner-border-sm"
+                          role="status"
+                          aria-hidden="true"
+                        ></span>
+                        Loading...
+                      } @else {
+                        Sign up
+                      }
                     </button>
                   </div>
                 </form>
-
               </div>
-              <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-                <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
-                  class="img-fluid" alt="Sample image">
+
+              <div class="col-md-10 col-lg-6 order-1 order-lg-2 text-center">
+                <img
+                  src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
+                  class="img-fluid rounded-3"
+                  alt="Sample image"
+                />
               </div>
             </div>
           </div>

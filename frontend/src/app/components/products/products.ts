@@ -7,6 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './products.css'
 })
 export class Products {
-  product: 
+   
 
 }
