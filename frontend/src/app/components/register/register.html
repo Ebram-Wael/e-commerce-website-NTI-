@@ -7,61 +7,83 @@
             <div class="row justify-content-center">
               <div class="col-md-10 col-lg-6 col-xl-5 order-2 order-lg-1">
 
-                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">Sign up</p>
+                <p class="text-center h1 fw-bold mb-5 mx-1 mx-md-4 mt-4">
+                  Sign up
+                </p>
 
-                <form class="mx-1 mx-md-4">
+                <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="mx-1 mx-md-4">
 
+                  <!-- Name -->
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-user fa-lg me-3 fa-fw"></i>
-                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                      <input type="text" id="form3Example1c" class="form-control" />
-                      <label class="form-label" for="form3Example1c">Your Name</label>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="text" id="formName" class="form-control" formControlName="name" />
+                      <label class="form-label" for="formName">Your Name</label>
+                      @if (registerForm.controls['name'].invalid && registerForm.controls['name'].touched) {
+                        <div class="text-danger">Name is required (min 3 chars).</div>
+                      }
                     </div>
                   </div>
 
+                  <!-- Email -->
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-envelope fa-lg me-3 fa-fw"></i>
-                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                      <input type="email" id="form3Example3c" class="form-control" />
-                      <label class="form-label" for="form3Example3c">Your Email</label>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="email" id="formEmail" class="form-control" formControlName="email" />
+                      <label class="form-label" for="formEmail">Your Email</label>
+                      @if (registerForm.controls['email'].invalid && registerForm.controls['email'].touched) {
+                        <div class="text-danger">Enter a valid email.</div>
+                      }
                     </div>
                   </div>
 
+                  <!-- Password -->
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-lock fa-lg me-3 fa-fw"></i>
-                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4c" class="form-control" />
-                      <label class="form-label" for="form3Example4c">Password</label>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="formPassword" class="form-control" formControlName="password" />
+                      <label class="form-label" for="formPassword">Password</label>
+                      @if (registerForm.controls['password'].invalid && registerForm.controls['password'].touched) {
+                        <div class="text-danger">Password must be at least 6 characters.</div>
+                      }
                     </div>
                   </div>
 
+                  <!-- Confirm Password -->
                   <div class="d-flex flex-row align-items-center mb-4">
                     <i class="fas fa-key fa-lg me-3 fa-fw"></i>
-                    <div data-mdb-input-init class="form-outline flex-fill mb-0">
-                      <input type="password" id="form3Example4cd" class="form-control" />
-                      <label class="form-label" for="form3Example4cd">Repeat your password</label>
+                    <div class="form-outline flex-fill mb-0">
+                      <input type="password" id="formConfirm" class="form-control" formControlName="confirmPassword" />
+                      <label class="form-label" for="formConfirm">Repeat your password</label>
+                      @if (registerForm.controls['confirmPassword'].invalid && registerForm.controls['confirmPassword'].touched) {
+                        <div class="text-danger">Please confirm your password.</div>
+                      }
                     </div>
                   </div>
 
+                  <!-- Checkbox -->
                   <div class="form-check d-flex justify-content-center mb-5">
-                    <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" />
-                    <label class="form-check-label" for="form2Example3">
-                      I agree all statements in <a href="#!">Terms of service</a>
+                    <input class="form-check-input me-2" type="checkbox" id="formAgree" formControlName="agree" />
+                    <label class="form-check-label" for="formAgree">
+                      I agree to all statements in <a href="#">Terms of service</a>
                     </label>
+                    @if (registerForm.controls['agree'].invalid && registerForm.controls['agree'].touched) {
+                      <div class="text-danger ms-2">You must agree before registering.</div>
+                    }
                   </div>
 
+                  <!-- Submit -->
                   <div class="d-flex justify-content-center mx-4 mb-3 mb-lg-4">
-                    <button  type="button" data-mdb-button-init data-mdb-ripple-init class="btn btn-primary btn-lg">Register</button>
+                    <button type="submit" class="btn btn-primary btn-lg" [disabled]="registerForm.invalid">
+                      Register
+                    </button>
                   </div>
-
                 </form>
 
               </div>
               <div class="col-md-10 col-lg-6 col-xl-7 d-flex align-items-center order-1 order-lg-2">
-
                 <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-registration/draw1.webp"
                   class="img-fluid" alt="Sample image">
-
               </div>
             </div>
           </div>
