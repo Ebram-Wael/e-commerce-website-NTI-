@@ -37,7 +37,7 @@ export const createProduct = async (req, res) => {
 export const getAllProducts = async (req, res) => {
   try {
     const allProductsInfo = await Product.find().populate("userId", "username email");
-    res.status(200).json({ message: "Products loaded successfully", products: allProductsInfo });
+    res.status(200).json({ message: "Products loaded successfully", data: allProductsInfo });
   } catch (error) {
     res.status(500).json({ message: "Failed to load products", error: error.message });
   }

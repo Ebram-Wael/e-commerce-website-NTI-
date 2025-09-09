@@ -1,8 +1,9 @@
 export interface IProducts {
-    id: number;
-    name: string;
-    quantity: number;
+    _id: string;
+    title: string;
+    status: string;
+    quantityInStore: number;
     price: number;
+    description: string;
     imageURl: string;
-    categoryID: number;
 }

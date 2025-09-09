@@ -53,9 +53,9 @@ export class RegisterComponent {
     );
   }
 
-  get f() {
-    return this.registerForm.controls;
-  }
+  // get f() {
+  //   return this.registerForm.controls;
+  // }
 
   onSubmit() {
     if (this.registerForm.invalid) {
