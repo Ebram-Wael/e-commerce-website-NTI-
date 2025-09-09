@@ -1,0 +1,43 @@
+<div class="admin-form-container">
+  <h2 class="form-title">Add New Product</h2>
+
+  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
+    
+    <!-- Product Name -->
+    <div class="form-group">
+      <label for="name">Product Name</label>
+      <input id="name" type="text" formControlName="name" placeholder="Enter product name" />
+    </div>
+
+    <!-- Price -->
+    <div class="form-group">
+      <label for="price">Price ($)</label>
+      <input id="price" type="number" formControlName="price" placeholder="Enter price" />
+    </div>
+
+    <!-- Quantity -->
+    <div class="form-group">
+      <label for="quantity">Quantity</label>
+      <input id="quantity" type="number" formControlName="quantity" placeholder="Enter quantity" />
+    </div>
+
+    <!-- Description -->
+    <div class="form-group">
+      <label for="description">Description</label>
+      <textarea id="description" rows="3" formControlName="description" placeholder="Write a description..."></textarea>
+    </div>
+
+    <!-- Photo -->
+    <div class="form-group">
+      <label for="photo">Product Photo</label>
+      <input id="photo" type="file" (change)="onFileSelected($event)" />
+      <div *ngIf="previewUrl" class="preview">
+        <img [src]="previewUrl" alt="Preview" />
+      </div>
+    </div>
+
+    <button type="submit" [disabled]="loading || productForm.invalid">
+      {{ loading ? 'Saving...' : 'Add Product' }}
+    </button>
+  </form>
+</div>
