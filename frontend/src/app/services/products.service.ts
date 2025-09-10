@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { IProducts } from '../models/iproduct'
 
 @Injectable({
@@ -37,10 +37,7 @@ export class ProductsService {
   deleteProduct(id: string): Observable<IProducts> {
     return this.http.delete<IProducts>(`${this.apiUrl}/${id}`, this.getHeaders());
   }
-  getProductsIds(): Observable<number[]> {
-  return this.http.get<IProducts[]>(this.apiUrl, this.getHeaders())
-    .pipe(
-      map((products: IProducts[]) => products.map(p => Number(p._id))) 
-    );
-}
+  addProductToCart(id: string): Observable<any> {
+    return this.http.post(`${this.apiUrl}/cart/add`, { productId: id }, this.getHeaders());
+  }
 }

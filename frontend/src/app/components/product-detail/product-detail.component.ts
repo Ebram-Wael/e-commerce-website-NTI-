@@ -12,9 +12,8 @@ import { ActivatedRoute, Router } from '@angular/router';
   styleUrl: './product-detail.component.css'
 })
 export class ProductDetailComponent {
-  productId!: number;
+  productId!: string;
   product: IProducts | null = null;
-  productIDs!: number[];
   constructor(
     public activatedRoute: ActivatedRoute,
     public productService: ProductsService,
@@ -23,44 +22,39 @@ export class ProductDetailComponent {
   ) { }
 
   ngOnInit() {
-    this.activatedRoute.paramMap.subscribe((params) => {
-      this.productId = Number(params.get('id'));
-      this.productService.getProductById(this.productId.toString())
+  this.activatedRoute.paramMap.subscribe((params) => {
+    const id = params.get('_id');
+    if (id) {
+      this.productId = id;
+      this.productService.getProductById(this.productId)
         .subscribe({
           next: (data) => { this.product = data; },
           error: (err) => { console.error('Error fetching product:', err); }
         });
-    });
-  }
+    } else {
+      console.error('Product ID not found in route');
+    }
+  });
+}
+
 
   goBack() {
     this.location.back();
   }
 
-  prev() {
-    this.productService.getProductsIds().subscribe({
-      next: (data) => {
-        this.productIDs = data;
-        let index = this.productIDs.indexOf(this.productId);
-        if (index > 0) {
-          this.router.navigateByUrl(`/productDetails/${this.productIDs[index - 1]}`);
-        }
-      },
-      error: (err) => console.error('Error fetching product IDs:', err)
-    });
-  }
+  
+  addToCart() {
+    if (!this.product) return;
 
-  next() {
-    this.productService.getProductsIds().subscribe({
-      next: (data) => {
-        this.productIDs = data;
-        let index = this.productIDs.indexOf(this.productId);
-        if (index < this.productIDs.length - 1) {
-          this.router.navigateByUrl(`/productDetails/${this.productIDs[index + 1]}`);
+    this.productService.addProductToCart(this.product._id.toString())
+      .subscribe({
+        next: (res) => {
+          alert(res.message);
+        },
+        error: (err) => {
+          console.error('Error adding to cart:', err);
+          alert('Failed to add product to cart');
         }
-      },
-      error: (err) => console.error('Error fetching product IDs:', err)
-    });
+      });
   }
-
 }
