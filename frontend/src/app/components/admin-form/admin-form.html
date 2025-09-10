@@ -1,43 +1,51 @@
-<div class="admin-form-container">
-  <h2 class="form-title">Add New Product</h2>
+<div class="container mt-5 mb-5" style="width: 70%;">
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Add New Product</h2>
 
-  <form [formGroup]="productForm" (ngSubmit)="onSubmit()" class="product-form">
-    
-    <!-- Product Name -->
-    <div class="form-group">
-      <label for="name">Product Name</label>
-      <input id="name" type="text" formControlName="name" placeholder="Enter product name" />
+      <form [formGroup]="productForm" (ngSubmit)="onSubmit()">
+        
+        <!-- Product Name -->
+        <div class="mb-3">
+          <label for="name" class="form-label">Product Name</label>
+          <input id="name" type="text" formControlName="name" class="form-control" placeholder="Enter product name" />
+        </div>
+
+        <!-- Price -->
+        <div class="mb-3">
+          <label for="price" class="form-label">Price ($)</label>
+          <input id="price" type="number" formControlName="price" class="form-control" placeholder="Enter price" />
+        </div>
+
+        <!-- Quantity -->
+        <div class="mb-3">
+          <label for="quantity" class="form-label">Quantity</label>
+          <input id="quantity" type="number" formControlName="quantity" class="form-control" placeholder="Enter quantity" />
+        </div>
+
+        <!-- Description -->
+        <div class="mb-3">
+          <label for="description" class="form-label">Description</label>
+          <textarea id="description" rows="3" formControlName="description" class="form-control" placeholder="Write a description..."></textarea>
+        </div>
+
+        <!-- Photo -->
+        <div class="mb-3">
+          <label for="photo" class="form-label">Product Photo</label>
+          <input id="photo" type="file" (change)="onFileSelected($event)" class="form-control" />
+        </div>
+
+        <div class="text-center mb-3" *ngIf="previewUrl">
+          <img [src]="previewUrl" alt="Preview" class="img-thumbnail" style="max-height: 200px;" />
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary" [disabled]="loading || productForm.invalid">
+            <span *ngIf="loading" class="spinner-border spinner-border-sm me-2"></span>
+            {{ loading ? 'Saving...' : 'Add Product' }}
+          </button>
+        </div>
+      </form>
     </div>
-
-    <!-- Price -->
-    <div class="form-group">
-      <label for="price">Price ($)</label>
-      <input id="price" type="number" formControlName="price" placeholder="Enter price" />
-    </div>
-
-    <!-- Quantity -->
-    <div class="form-group">
-      <label for="quantity">Quantity</label>
-      <input id="quantity" type="number" formControlName="quantity" placeholder="Enter quantity" />
-    </div>
-
-    <!-- Description -->
-    <div class="form-group">
-      <label for="description">Description</label>
-      <textarea id="description" rows="3" formControlName="description" placeholder="Write a description..."></textarea>
-    </div>
-
-    <!-- Photo -->
-    <div class="form-group">
-      <label for="photo">Product Photo</label>
-      <input id="photo" type="file" (change)="onFileSelected($event)" />
-      <div *ngIf="previewUrl" class="preview">
-        <img [src]="previewUrl" alt="Preview" />
-      </div>
-    </div>
-
-    <button type="submit" [disabled]="loading || productForm.invalid">
-      {{ loading ? 'Saving...' : 'Add Product' }}
-    </button>
-  </form>
+  </div>
 </div>

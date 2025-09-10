@@ -13,11 +13,12 @@ export const routes: Routes = [
                         { path: 'home', component: HomeComponent, title: 'Home' },
                         { path: 'products', component: Products },
                         { path: 'products/:id', component: ProductDetailComponent },
+                        { path: 'adminform', component: AdminFormComponent },
 
                 ]
         },
         { path: 'register', component: RegisterComponent },
         { path: 'login', component: LoginComponent },
-        { path: 'adminform', component: AdminFormComponent },
+        
         
 ];

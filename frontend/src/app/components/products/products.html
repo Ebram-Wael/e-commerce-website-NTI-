@@ -1,4 +1,4 @@
-<div class="container mt-4">5
+<div class="container mt-4">
   @if(loading) {
   <div class="text-center my-4">Loading...</div>
 
@@ -10,7 +10,7 @@
     <div class="col-12 col-sm-6 col-md-4 mb-4">
       <div class="card h-100 shadow-sm">
         <img
-          [src]="product.imageURl || 'assets/logo.jpg'"
+          src="{{ product.imageUrl }}"
           class="card-img-top"
           alt="{{ product.title }}"
           style="height: 200px; object-fit: cover"
