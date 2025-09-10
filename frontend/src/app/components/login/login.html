@@ -1,0 +1,89 @@
+<section class="vh-100 d-flex align-items-center justify-content-center bg-light">
+  <div class="container">
+    <div class="row justify-content-center align-items-center">
+      <!-- Left image -->
+      <div class="col-md-6 d-none d-md-block text-center">
+        <img
+          src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/draw2.webp"
+          class="img-fluid"
+          alt="Sample image"
+        />
+      </div>
+
+      <!-- Right form -->
+      <div class="col-md-6 col-lg-5">
+        <div class="card shadow-lg rounded-4 p-4">
+          <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <h2 class="fw-bold mb-2 text-uppercase">Login</h2>
+
+            <!-- Email input -->
+            <div class="form-outline mb-3">
+              <label class="form-label" for="formEmail">Email address</label>
+              <input
+                type="email"
+                id="formEmail"
+                class="form-control form-control-lg"
+                placeholder="Enter a valid email address"
+                formControlName="email"
+              />
+              @if (loginForm.controls['email'].invalid && loginForm.controls['email'].touched) {
+              <div class="text-danger small">Please enter a valid email.</div>
+              }
+            </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-3">
+              <label class="form-label" for="formPassword">Password</label>
+              <input
+                type="password"
+                id="formPassword"
+                class="form-control form-control-lg"
+                placeholder="Enter password"
+                formControlName="password"
+              />
+              @if (loginForm.controls['password'].invalid && loginForm.controls['password'].touched)
+              {
+              <div class="text-danger small">Password must be at least 10 characters.</div>
+              }
+            </div>
+
+            <!-- Remember + Forgot -->
+            <div class="d-flex justify-content-between align-items-center mb-3">
+              <div class="form-check">
+                <input
+                  class="form-check-input me-2"
+                  type="checkbox"
+                  id="rememberMe"
+                  formControlName="remember"
+                />
+                <label class="form-check-label" for="rememberMe"> Remember me </label>
+              </div>
+              <a href="#!" class="text-body small">Forgot password?</a>
+            </div>
+
+            <!-- Submit -->
+            <div class="text-center">
+              <button
+                type="submit"
+                class="btn btn-primary btn-lg w-100"
+                [disabled]="loginForm.invalid"
+              >
+                @if(isLoading) {
+                <span
+                  class="spinner-border spinner-border-sm"
+                  role="status"
+                  aria-hidden="true"
+                ></span>
+                Loading... }@else { Login}
+              </button>
+              <p class="small fw-bold mt-3 mb-0">
+                Don't have an account?
+                <a href="#!" class="link-danger">Register</a>
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
