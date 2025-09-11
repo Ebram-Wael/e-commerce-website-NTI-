@@ -96,7 +96,11 @@ export const updateUser = async (req, res) => {
       .status(201)
       .json({ message: "user was edited successfully", data: newUser });
   } catch (error) {
-    res.status(500).json({ message: "fail" });
+    res.status(500).json({
+       message: "fail",
+      error: error.message
+ 
+      });
   }
 };
 
@@ -130,7 +134,11 @@ export const deleteAdmin = async (req, res) => {
 
     res.status(204).json();
   } catch (error) {
-    res.status(500).json({ message: "Error" });
+    res.status(500).json({ 
+      message: "Error",
+      error: error.message
+
+     });
   }
 };
 
@@ -299,6 +307,8 @@ export const refreshToken = async (req, res, next) => {
   } catch (error) {
     res.status(403).json({
       message: "Bad Request",
+      error: error.message
+
     });
   }
 };
@@ -326,10 +336,12 @@ export const getCart = async(req, res) => {
   
 
   try{
-    const user  = await req.user.populate('cart.items.productId');
+   const user = await usersModel.findById(req.userId);
+
+    const userData  = await user.populate('cart.items.productId');
   
-  let products = user.cart.items;
-  let totalPrice = user.cart.totalPrice;
+  let products = userData.cart.items;
+  let totalPrice = userData.cart.totalPrice;
 
   const uploadedCart = {
     products,
@@ -378,8 +390,9 @@ export const addProductToCart = async(req, res) => {
     const prodId = req.body.productId;
 
   const product = await productModel.findById(prodId);
+  const user = await usersModel.findById(req.userId);
 
-  const result = await req.user.addToCart(product);
+  const result = await user.addToCart(product);
   return res.status(200).json({ message: "Product Added To Cart Successfully", data: result });
 
 
@@ -388,7 +401,9 @@ export const addProductToCart = async(req, res) => {
    }
     catch(error){
     return res.status(500).json({
-      message:"Failed To Add Product To Cart Some Error Happen"
+      message:"Failed To Add Product To Cart Some Error Happen",
+      error: error.message
+      
     })
 
   }
@@ -423,13 +438,17 @@ export const deleteProductFromCart = async(req, res, next) => {
  
   try{
 
-  const result =  await req.user.removeFromCart(prodId);
+  const user = await usersModel.findById(req.userId);
+
+
+  const result =  await user.removeFromCart(prodId);
   return res.status(200).json({ message: "Remove Product From Cart Successfully", data: result });
 
   }
    catch(error){
     return res.status(500).json({
-      message:"Failed To Remove from Cart Some Error Happen"
+      message:"Failed To Remove from Cart Some Error Happen",
+      error: error.message
     })
 
   }
