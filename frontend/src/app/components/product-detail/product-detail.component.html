@@ -1,0 +1,21 @@
+<div class="container mt-5 mb-5 d-flex justify-content-center">
+  <div class="card shadow" style="width: 24rem" *ngIf="product">
+    <img
+      [src]="product.imageUrl"
+      class="card-img-top"
+      [alt]="product.title"
+      style="height: 250px; object-fit: cover"
+    />
+    <div class="card-body">
+      <h5 class="card-title">{{ product.title }}</h5>
+      <p class="card-text"><strong>Status:</strong> {{ product.status }}</p>
+      <p class="card-text"><strong>Price:</strong> ${{ product.price }}</p>
+      <p class="card-text"><strong>Quantity:</strong> {{ product.quantityInStore }}</p>
+      <p class="card-text">{{ product.description }}</p>
+    </div>
+    <div class="card-footer d-flex justify-content-between">
+      <button (click)="goBack()" class="btn btn-primary">Back</button>
+      <button (click)="addToCart()" class="btn btn-success">Add to Cart</button>
+    </div>
+  </div>
+</div>

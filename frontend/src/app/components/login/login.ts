@@ -31,6 +31,7 @@ export class LoginComponent {
 
           if (res.token) {
             localStorage.setItem('token', res.token);
+            localStorage.setItem('refreshToken', res.refreshToken);
             this.router.navigate(['/products']);
             this.isLoading = false;
           }

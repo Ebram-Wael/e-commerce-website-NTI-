@@ -1,10 +1,9 @@
-export interface Iproduct {
-    id:"22",
-    name: "phone",
-    storename: "",
-    price: 200,
-    quantity: 3,
-    imgUrl: "",
-    catid:
-    
+export interface IProducts {
+    _id: string;
+    title: string;
+    status: string;
+    quantityInStore: number;
+    price: number;
+    description: string;
+    imageUrl: string;
 }
