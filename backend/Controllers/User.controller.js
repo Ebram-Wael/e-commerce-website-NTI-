@@ -103,10 +103,7 @@ export const updateUser = async (req, res) => {
 /**
  * Delete an Admin account
  *
-<<<<<<< HEAD
-=======
  * @author Hussien
->>>>>>> hussien-updates
  * @function deleteAdmin
  * @description Deletes an admin user by ID and removes all products created by that admin.
  *              - Accessible only to Admins.
@@ -197,10 +194,7 @@ export const createSalesMan = async (req, res) => {
 /**
  * User Login
  *
-<<<<<<< HEAD
-=======
  * @author Hussien
->>>>>>> hussien-updates
  * @function login
  * @description Authenticates a user with email and password.
  *              - Verifies credentials.
@@ -259,10 +253,7 @@ export const login = async (req, res) => {
 /**
  * Refresh Access Token
  *
-<<<<<<< HEAD
-=======
  * @author Hussien
->>>>>>> hussien-updates
  * @function refreshToken
  * @description Validates the provided refresh token and issues a new access token.
  *              - Requires refresh token in req.body.
