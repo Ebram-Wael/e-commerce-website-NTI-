@@ -8,7 +8,7 @@ make .env file and add those lines to .env file:
 
 
 PORT = 3000
-MONGO_URI = 'mongodb://localhost:27017/ecommerceDB'
+MONGO_URI =  'mongodb+srv://11410120226035_db_user:nOiX0Ld9JZFrznud@cluster0.ld6vqqi.mongodb.net/ecommerceDB?retryWrites=true&w=majority&appName=Cluster0'
 JWT_SECRET = 'myJsonwebTokenSecret'
 JWT_REFRESH_TOKEN_SECRET = 'myJsonwebTokenRefreshSecret'
 CLOUDINARY_CLOUD_NAME=dqavuojks
