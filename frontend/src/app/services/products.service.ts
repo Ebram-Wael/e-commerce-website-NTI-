@@ -38,6 +38,6 @@ export class ProductsService {
     return this.http.delete<IProducts>(`${this.apiUrl}/${id}`, this.getHeaders());
   }
   addProductToCart(id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/cart/add`, { productId: id }, this.getHeaders());
+    return this.http.post(`${this.apiUrl}/cart`, { productId: id }, this.getHeaders());
   }
 }
