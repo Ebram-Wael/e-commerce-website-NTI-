@@ -7,7 +7,6 @@ import jwt from "jsonwebtoken";
 import promisify from "util";
 import { makeToken, makeRefreshToken } from "../utils/token.js";
 
-// Badr Ahmed
 /**
  * Register a new user (self-registration)
  *

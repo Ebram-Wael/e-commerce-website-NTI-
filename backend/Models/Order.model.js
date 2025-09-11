@@ -55,7 +55,7 @@ const orderSchema = new mongoose.Schema(
   }
 );
 
-// Hook قبل الحفظ - يضمن ان الاستاتس لو مش متحدد يفضل pending
+
 orderSchema.pre("save", function (next) {
   if (!this.status) {
     this.status = "pending";
@@ -63,13 +63,13 @@ orderSchema.pre("save", function (next) {
   next();
 });
 
-// Hook قبل التحديث - يتأكد أن الاستاتس مظبوط
+
 orderSchema.pre("findOneAndUpdate", function (next) {
   const update = this.getUpdate();
   if (update.status !== undefined) {
     const validStatuses = ["pending", "received", "shipped", "canceled"];
     if (!validStatuses.includes(update.status)) {
-      update.status = "pending"; // fallback لو مش مظبوط
+      update.status = "pending";
     }
     this.setUpdate(update);
   }
