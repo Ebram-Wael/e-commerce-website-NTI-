@@ -9,20 +9,23 @@ import { CommonModule } from '@angular/common';
   standalone: true,
   imports: [CommonModule],
   templateUrl: './products.html',
-  styleUrls: ['./products.css']   
+  styleUrls: ['./products.css']
 })
 export class Products implements OnInit {
   products: IProducts[] = [];
   loading = false;
   error: string | null = null;
+  fevProducts: IProducts[] = [];
 
   constructor(
     private productService: ProductsService,
     private router: Router,
-    private cdr: ChangeDetectorRef 
+    private cdr: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
+    const storedFavs = localStorage.getItem('fevProducts');
+    if (storedFavs) this.fevProducts = JSON.parse(storedFavs);
     this.loadProducts();
   }
 
@@ -30,13 +33,11 @@ export class Products implements OnInit {
     this.loading = true;
     this.productService.getProducts().subscribe({
       next: (data: any) => {
-        this.products = data.data;  
-        console.log('Loaded products:', this.products);
+        this.products = data.data;
         this.loading = false;
-        this.cdr.detectChanges();   
+        this.cdr.detectChanges();
       },
-      error: (err) => {
-        console.error('Error fetching products:', err);
+      error: () => {
         this.error = 'Failed to load products';
         this.loading = false;
         this.cdr.detectChanges();
@@ -47,5 +48,20 @@ export class Products implements OnInit {
   openDetails(productId?: string) {
     if (!productId) return;
     this.router.navigate(['/products', productId]);
+  }
+
+  toggleFavorite(product: IProducts) {
+    const index = this.fevProducts.findIndex(p => p._id === product._id);
+    if (index >= 0) {
+      this.fevProducts.splice(index, 1);
+    } else {
+      this.fevProducts.push(product);
+    }
+    localStorage.setItem('fevProducts', JSON.stringify(this.fevProducts));
+    this.cdr.detectChanges();
+  }
+
+  isFavorite(product: IProducts): boolean {
+    return this.fevProducts.some(p => p._id === product._id);
   }
 }

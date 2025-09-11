@@ -18,14 +18,13 @@ export class LoginComponent {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(10)]],
-      remember: [false],
     });
   }
   errorMessage = '';
   onSubmit(): void {
     if (this.loginForm.valid) {
       this.isLoading = true;
-      this.authService.login(this.loginForm.value).subscribe({
+      this.authService.login( this.loginForm.value).subscribe({
         next: (res) => {
           console.log('Login success ✅', res);
 

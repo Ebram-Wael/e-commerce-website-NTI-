@@ -5,7 +5,13 @@ import { Products } from './components/products/products';
 import { MainLayoutComponent } from './components/main-layout/main-layout.component';
 import { HomeComponent } from './components/home/home.component';
 import { ProductDetailComponent } from './components/product-detail/product-detail.component';
-import { AdminFormComponent }  from './components/admin-form/admin-form';
+import { AdminFormComponent } from './components/admin-form/admin-form';
+import { CartComponent } from './components/cart/cart.component';
+import { ProfileComponent } from './components/profile/profile.component';
+const localUser = localStorage.getItem('user');
+if (localUser) {
+        const user = JSON.parse(localUser);
+}
 export const routes: Routes = [
         {
                 path: '', component: MainLayoutComponent, children: [
@@ -14,11 +20,13 @@ export const routes: Routes = [
                         { path: 'products', component: Products },
                         { path: 'products/:id', component: ProductDetailComponent },
                         { path: 'adminform', component: AdminFormComponent },
+                        { path: 'cart', component: CartComponent },
+                        { path: 'profile', component: ProfileComponent },
 
                 ]
         },
         { path: 'register', component: RegisterComponent },
         { path: 'login', component: LoginComponent },
-        
-        
+
+
 ];

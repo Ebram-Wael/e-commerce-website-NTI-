@@ -9,7 +9,8 @@ import {
   refreshToken,
   getCart,
   addProductToCart,
-  deleteProductFromCart
+  deleteProductFromCart,
+  getMe,
 } from "../Controllers/User.controller.js";
 const router = express.Router();
 import { restrictTo } from "../Middleware/authorization.js";
@@ -111,5 +112,13 @@ router.patch("/:id", auth, restrictTo("user", "admin"), updateUser);
  * @access Public
  */
 router.post("/signup", signUp);
+
+/**
+ * @author Hussien
+ * @route GET http://localhost:3000/users/me
+ * @description Get the authenticated user's information
+ * @access User
+ */
+router.get("/me", auth, getMe);
 
 export default router;

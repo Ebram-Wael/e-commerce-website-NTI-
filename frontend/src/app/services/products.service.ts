@@ -46,4 +46,7 @@ export class ProductsService {
   addProductToCart(id: string): Observable<any> {
     return this.http.post(this.cartUrl, { productId: id }, this.getAuthHeaders());
   }
+  getCart(): Observable<any> {
+    return this.http.get(this.cartUrl, this.getAuthHeaders());
+  }
 }

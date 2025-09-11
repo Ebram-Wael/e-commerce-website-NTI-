@@ -4,16 +4,12 @@ import connectDB from "./utils/db.js";
 import cors from "cors";
 import usersRoutes from "./Routes/user.route.js";
 import productRoutes from "./Routes/product.route.js";
-
-import bodyParser from "body-parser";
-
-
+import orderRoutes from "./Routes/order.route.js";
 
 const app = express();
 dotenv.config();
 
 app.use(express.json({limit: '50mb'}));
-
 app.use(cors());
 
 

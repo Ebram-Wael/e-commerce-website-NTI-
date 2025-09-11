@@ -97,10 +97,9 @@ export const updateUser = async (req, res) => {
       .json({ message: "user was edited successfully", data: newUser });
   } catch (error) {
     res.status(500).json({
-       message: "fail",
-      error: error.message
- 
-      });
+      message: "fail",
+      error: error.message,
+    });
   }
 };
 
@@ -134,11 +133,10 @@ export const deleteAdmin = async (req, res) => {
 
     res.status(204).json();
   } catch (error) {
-    res.status(500).json({ 
+    res.status(500).json({
       message: "Error",
-      error: error.message
-
-     });
+      error: error.message,
+    });
   }
 };
 
@@ -307,13 +305,10 @@ export const refreshToken = async (req, res, next) => {
   } catch (error) {
     res.status(403).json({
       message: "Bad Request",
-      error: error.message
-
+      error: error.message,
     });
   }
 };
-
-
 
 /**
  * Get User Cart
@@ -332,41 +327,31 @@ export const refreshToken = async (req, res, next) => {
  * @response {500} Internal Server Error - Failed to retrieve cart.
  */
 
-export const getCart = async(req, res) => {
-  
+export const getCart = async (req, res) => {
+  try {
+    const user = await usersModel.findById(req.userId);
 
-  try{
-   const user = await usersModel.findById(req.userId);
+    const userData = await user.populate("cart.items.productId");
 
-    const userData  = await user.populate('cart.items.productId');
-  
-  let products = userData.cart.items;
-  let totalPrice = userData.cart.totalPrice;
+    let products = userData.cart.items;
+    let totalPrice = userData.cart.totalPrice;
 
-  const uploadedCart = {
-    products,
-    totalPrice
-  }
+    const uploadedCart = {
+      products,
+      totalPrice,
+    };
 
-  return res.status(200).json({ message: "Cart Uploaded Successfully", data: uploadedCart });
-
-  }
-
-
-  catch(error){
+    return res
+      .status(200)
+      .json({ message: "Cart Uploaded Successfully", data: uploadedCart });
+  } catch (error) {
     return res.status(500).json({
-      message:"Failed To Upload Cart Some Error Happen"
-    })
-
+      message: "Failed To Upload Cart Some Error Happen",
+    });
   }
-    
-    }
-     
+};
 
-
-
-
-    /**
+/**
  * Add Product to Cart
  *
  * @author Hussien
@@ -383,41 +368,28 @@ export const getCart = async(req, res) => {
  * @response {200} Success - Product added to cart successfully.
  * @response {500} Internal Server Error - Failed to add product to cart.
  */
-export const addProductToCart = async(req, res) => {
-  
-  
-   try{
+export const addProductToCart = async (req, res) => {
+  try {
     const prodId = req.body.productId;
 
-  const product = await productModel.findById(prodId);
-  const user = await usersModel.findById(req.userId);
+    const product = await productModel.findById(prodId);
+    const user = await usersModel.findById(req.userId);
 
-  const result = await user.addToCart(product);
-  return res.status(200).json({ message: "Product Added To Cart Successfully", data: result });
-
-
-
-
-   }
-    catch(error){
+    const result = await user.addToCart(product);
+    return res
+      .status(200)
+      .json({ message: "Product Added To Cart Successfully", data: result });
+  } catch (error) {
     return res.status(500).json({
-      message:"Failed To Add Product To Cart Some Error Happen",
-      error: error.message
-      
-    })
-
+      message: "Failed To Add Product To Cart Some Error Happen",
+      error: error.message,
+    });
   }
-
 };
-
-
-
-
-
 
 /**
  * Delete Product from Cart
- * 
+ *
  * @author Hussien
  * @function deleteProductFromCart
  * @description Removes a specific product from the authenticated user's cart.
@@ -432,27 +404,58 @@ export const addProductToCart = async(req, res) => {
  * @response {500} Internal Server Error - Failed to remove product from cart.
  */
 
-export const deleteProductFromCart = async(req, res, next) => {
+export const deleteProductFromCart = async (req, res, next) => {
   const prodId = req.body.productId;
 
- 
-  try{
+  try {
+    const user = await usersModel.findById(req.userId);
 
-  const user = await usersModel.findById(req.userId);
-
-
-  const result =  await user.removeFromCart(prodId);
-  return res.status(200).json({ message: "Remove Product From Cart Successfully", data: result });
-
-  }
-   catch(error){
+    const result = await user.removeFromCart(prodId);
+    return res
+      .status(200)
+      .json({ message: "Remove Product From Cart Successfully", data: result });
+  } catch (error) {
     return res.status(500).json({
-      message:"Failed To Remove from Cart Some Error Happen",
-      error: error.message
-    })
-
+      message: "Failed To Remove from Cart Some Error Happen",
+      error: error.message,
+    });
   }
+};
 
- 
-    
+/**
+ * Get Current Logged-in User
+ *
+ * @author Hussien
+ * @function getMe
+ * @description Retrieves the currently logged-in user's details.
+ *              - Requires authentication (req.userId must be set by middleware).
+ *
+ * @param {Object} req - Express request object with authenticated user ID in req.userId
+ * @param {Object} res - Express response object
+ * @returns {Promise<void>} JSON response with user data
+ *
+ * @response {200} Success - Returns user data excluding sensitive fields
+ * @response {404} Not Found - User not found
+ * @response {500} Internal Server Error - Unexpected error
+ */
+export const getMe = async (req, res) => {
+  try {
+    const user = await usersModel
+      .findById(req.userId)
+      .select("-password -refreshToken");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    return res.status(200).json({
+      message: "User data retrieved successfully",
+      data: user,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      message: "Failed to retrieve user data",
+      error: error.message,
+    });
+  }
 };
