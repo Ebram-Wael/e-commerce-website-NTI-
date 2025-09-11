@@ -71,7 +71,8 @@ export class RegisterComponent {
     this.authService.register({ username, email, password }).subscribe({
       next: (res) => {
         console.log('✅ User Registered:', res);
-        localStorage.setItem('user', res.data);
+        const user = JSON.stringify(res.data);
+        localStorage.setItem('user', user);
         alert('Registration successful!');
         this.router.navigate(['/products']);
         this.isLoading = false;

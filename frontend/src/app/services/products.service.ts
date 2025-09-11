@@ -8,6 +8,7 @@ import { IProducts } from '../models/iproduct';
 })
 export class ProductsService {
   private apiUrl = 'http://localhost:3000/products';
+  private cartUrl = 'http://localhost:3000/users/cart';
 
   private getAuthHeaders() {
     const token = localStorage.getItem('token');
@@ -43,6 +44,6 @@ export class ProductsService {
     return this.http.delete<IProducts>(`${this.apiUrl}/${id}`, this.getAuthHeaders());
   }
   addProductToCart(id: string): Observable<any> {
-    return this.http.post(`${this.apiUrl}/cart`, { productId: id }, this.getAuthHeaders());
+    return this.http.post(this.cartUrl, { productId: id }, this.getAuthHeaders());
   }
 }
