@@ -1,23 +1,48 @@
 import Order from "../Models/Order.model.js";
+import usersModel from "../Models/User.model.js";
 
 // Create Order
 export const createOrder = async (req, res) => {
   try {
-    const { products, totalPrice, address, paymentMethod } = req.body;
+    const { address, paymentMethod } = req.body;
 
+    // 1️⃣ جلب المستخدم مع الكارت
+    const user = await usersModel.findById(req.userId).populate("cart.items.productId");
+
+    if (!user || !user.cart.items.length) {
+      return res.status(400).json({
+        status: "error",
+        message: "Cart is empty",
+      });
+    }
+
+    // 2️⃣ تجهيز المنتجات من الكارت
+    const products = user.cart.items.map(item => ({
+      productId: item.productId._id,
+      name: item.productId.name,
+      quantity: item.quantity,
+      price: item.price
+    }));
+
+    const totalPrice = user.cart.totalPrice;
+
+    // 3️⃣ إنشاء الأوردر
     const order = new Order({
       user: {
-        userId: req.userId,
-        username: req.username, 
+        userId: user._id,
+        username: user.username,
       },
       products,
       totalPrice,
       address,
       paymentMethod,
-      status: "pending", // default status
+      status: "pending", // default
     });
 
     await order.save();
+
+    // 4️⃣ فض الكارت
+    await user.clearCart();
 
     res.status(201).json({
       status: "success",
