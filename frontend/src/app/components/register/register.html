@@ -5,9 +5,9 @@
         <div class="card shadow-lg border-0 rounded-4">
           <div class="card-body p-5">
             <div class="row g-4 align-items-center">
-
+              
               <div class="col-md-10 col-lg-6 order-2 order-lg-1">
-                <h1 class="text-center fw-bold mb-4">Sign up</h1>
+                <h1 class="text-center fw-bold mb-4 text-primary">Sign up</h1>
 
                 <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                   
@@ -20,6 +20,7 @@
                       id="formName"
                       class="form-control"
                       formControlName="username"
+                      placeholder="Enter your name"
                     />
                     @if (registerForm.controls['username'].invalid && registerForm.controls['username'].touched) {
                       <div class="text-danger small mt-1">
@@ -37,6 +38,7 @@
                       id="formEmail"
                       class="form-control"
                       formControlName="email"
+                      placeholder="example@mail.com"
                     />
                     @if (registerForm.controls['email'].invalid && registerForm.controls['email'].touched) {
                       <div class="text-danger small mt-1">Enter a valid email.</div>
@@ -52,6 +54,7 @@
                       id="formPassword"
                       class="form-control"
                       formControlName="password"
+                      placeholder="Enter your password"
                     />
                     @if (registerForm.controls['password'].invalid && registerForm.controls['password'].touched) {
                       <div class="text-danger small mt-1">
@@ -69,6 +72,7 @@
                       id="formConfirm"
                       class="form-control"
                       formControlName="confirmPassword"
+                      placeholder="Re-enter password"
                     />
                     @if (registerForm.controls['confirmPassword'].errors?.['required'] && registerForm.controls['confirmPassword'].touched) {
                       <div class="text-danger small mt-1">Please confirm your password.</div>
@@ -86,7 +90,7 @@
                       formControlName="agree"
                     />
                     <label class="form-check-label" for="formAgree">
-                      I agree to all statements in <a href="#">Terms of service</a>
+                      I agree to all statements in <a href="#" class="text-decoration-none">Terms of service</a>
                     </label>
                     @if (registerForm.controls['agree'].invalid && registerForm.controls['agree'].touched) {
                       <div class="text-danger small mt-1">You must agree before registering.</div>
@@ -101,7 +105,7 @@
                     }
                     <button
                       type="submit"
-                      class="btn btn-primary btn-lg"
+                      class="btn btn-primary btn-lg shadow-sm"
                       [disabled]="registerForm.invalid || isLoading"
                     >
                       @if(isLoading) {
@@ -112,7 +116,7 @@
                         ></span>
                         Loading...
                       } @else {
-                        Sign up
+                        <i class="fas fa-user-plus me-2"></i> Sign up
                       }
                     </button>
                   </div>
@@ -126,6 +130,7 @@
                   alt="Sample image"
                 />
               </div>
+
             </div>
           </div>
         </div>
