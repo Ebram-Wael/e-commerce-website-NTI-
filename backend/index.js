@@ -4,6 +4,7 @@ import connectDB from "./utils/db.js";
 import cors from "cors";
 import usersRoutes from "./Routes/user.route.js";
 import productRoutes from "./Routes/product.route.js";
+import categoryRoutes from "./Routes/Category.route.js";
 
 const app = express();
 dotenv.config();
@@ -18,6 +19,8 @@ app.get('/', (req, res) => {
 
 app.use("/users", usersRoutes);
 app.use("/products", productRoutes);
+app.use("/category", categoryRoutes);
+
 
 connectDB().then(() => {
   app.listen(process.env.PORT, () => {

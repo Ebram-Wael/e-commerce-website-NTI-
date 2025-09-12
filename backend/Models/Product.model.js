@@ -25,11 +25,18 @@ const productSchema = new mongoose.Schema({
     imageUrl: {
         type: String,
     },
-    userId: {
+    userReference: {
         type: mongoose.Schema.Types.ObjectId,  
         ref: 'User',
         required: true
+    },
+    categoryReference: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Category',
+        required: true
     }
+
+
 }, {
     timestamps: true 
 });
@@ -63,6 +70,6 @@ productSchema.pre("findOneAndUpdate", function(next){
 
 
 
-const productsModel = mongoose.model('Product', productSchema);
+const productsModel = mongoose.models.Product || mongoose.model('Product', productSchema);
 
 export default productsModel;
