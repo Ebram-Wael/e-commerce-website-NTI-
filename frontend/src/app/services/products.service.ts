@@ -49,4 +49,12 @@ export class ProductsService {
   getCart(): Observable<any> {
     return this.http.get(this.cartUrl, this.getAuthHeaders());
   }
+  removeProductFromCart(productId: string): Observable<any> {
+  return this.http.delete(this.cartUrl, {
+    ...this.getAuthHeaders(),
+    body: { productId }
+  });
+}
+
+
 }
