@@ -26,22 +26,17 @@ const productSchema = new mongoose.Schema(
     imageUrl: {
       type: String,
     },
-    userReference: {
-        type: mongoose.Schema.Types.ObjectId,  
-        ref: 'User',
-        required: true
+    imageId: { type: String },
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
     },
-    categoryReference: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Category',
-        required: true
-    }
-
-
-}, {
-    timestamps: true 
-});
-
+  },
+  {
+    timestamps: true,
+  }
+);
 
 productSchema.pre("save", function (next) {
   if (this.quantityInStore === 0) {
@@ -65,8 +60,6 @@ productSchema.pre("findOneAndUpdate", function (next) {
   next();
 });
 
-
-
-const productsModel = mongoose.models.Product || mongoose.model('Product', productSchema);
+const productsModel = mongoose.model("Product", productSchema);
 
 export default productsModel;

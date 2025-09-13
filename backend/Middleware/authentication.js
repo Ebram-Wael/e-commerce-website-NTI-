@@ -14,9 +14,10 @@ export const auth = async (req, res, next) => {
     const token = authorization.startsWith("Bearer ")
       ? authorization.split(" ")[1]
       : authorization;
-   
+    // const token = authorization;
+    // console.log(authorization);
     let decode = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
-    
+    // console.log('Decoded JWT:', decode);
 
     req.role = decode.role;
     req.userId = decode.id;
@@ -25,7 +26,6 @@ export const auth = async (req, res, next) => {
   } catch (error) {
     res.status(403).json({
       message: "invaild token",
-      error: error.message,
     });
   }
 };
