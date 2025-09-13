@@ -1,28 +1,29 @@
 import Product from "../Models/Product.model.js";
 import cloudinary from "../utils/cloudinary.js";
+// controllers/product.controller.js
+
+import Product from "../models/Product.model.js";
+import Category from "../models/Category.model.js";
 
 // Create Product
 export const createProduct = async (req, res) => {
   try {
-    const { title, description, price, quantityInStore, image } = req.body;
+    const { title, description, price, quantityInStore, categoryName  } = req.body;
 
-    if (!title || !description || !price || !quantityInStore || !image) {
-      return res.status(400).json({
-        status: "fail",
-        message: "All fields are required",
-      });
+    const category = await Category.findOne({ name: categoryName });
+
+    if (!category) {
+      return res.status(400).json({ message: "Category not found. Please create it first." });
     }
-
-    const result = await cloudinary.uploader.upload(image, { folder: "products" });
 
     const product = new Product({
       title,
       description,
       price,
-      quantityInStore,
-      imageUrl: result.secure_url,
-      imageId: result.public_id,
-      userId: req.userId,
+      quantityInStore: quantityInStore || 0,
+      imageUrl: req.file ? req.file.path : undefined,
+      userReference: req.userId,
+      categoryReference: category._id
     });
 
     await product.save();
@@ -36,8 +37,18 @@ export const createProduct = async (req, res) => {
 // Get All Products
 export const getAllProducts = async (req, res) => {
   try {
-    const allProductsInfo = await Product.find().populate("userId", "username email");
-    res.status(200).json({ message: "Products loaded successfully", data: allProductsInfo });
+    const allProductsInfo = await Product.find()
+    .populate(
+      "userId",
+      "username email"
+    )
+    .populate(
+      "categoryReference", "name description"
+    );
+    res.status(200).json({
+      message: "Products loaded successfully",
+      products: allProductsInfo,
+    });
   } catch (error) {
     res.status(500).json({ message: "Failed to load products", error: error.message });
   }
@@ -46,7 +57,13 @@ export const getAllProducts = async (req, res) => {
 // Get Product by ID
 export const getProductByID = async (req, res) => {
   try {
-    const product = await Product.findById(req.params.id).populate("userId", "username email");
+    const product = await Product.findById(req.params.id).populate(
+      "userId",
+      "username email"
+    )
+    .populate(
+      "categoryReference", "name description"
+    );
 
     if (!product) return res.status(404).json({ status: "fail", message: "Product not found" });
 
@@ -59,26 +76,42 @@ export const getProductByID = async (req, res) => {
 // Update Product
 export const updateProduct = async (req, res) => {
   try {
-    const { title, description, price, quantityInStore, image } = req.body;
-    let product = await Product.findById(req.params.id);
+    let updatedData = { ...req.body };
+    if(updatedData.categoryName) {
+      const categoryName = updateData.categoryName.toUpperCase();
+      const category = await Category.findOne({ name: categoryName });
+      if (!category) {
+        return res.status(400).json({ message: "Category not found. Please create it first." });
+      }
+      updatedData.categoryReference = category._id;
+      delete updatedData.categoryName;
 
-    if (!product) return res.status(404).json({ status: "fail", message: "Product not found" });
+    }
+    let product = await Product.findByIdAndUpdate(
+      req.params.id,
+      updatedData,
+      { new: true, runValidators: true }
+    );
 
-    if (image) {
-      if (product.imageId) await cloudinary.uploader.destroy(product.imageId);
-
-      const result = await cloudinary.uploader.upload(image, { folder: "products" });
-      product.imageUrl = result.secure_url;
-      product.imageId = result.public_id;
+    if (!product) {
+      return res.status(404).json({
+        status: "fail",
+        message: "Product not found",
+      });
     }
 
-    product.title = title || product.title;
-    product.description = description || product.description;
-    product.price = price || product.price;
-    product.quantityInStore = quantityInStore ?? product.quantityInStore;
+    if (req.file) {
+      product.imageUrl = req.file.path;
+      await product.save();
+    }
 
-    await product.save();
-    product = await Product.findById(req.params.id).populate("userId", "username email");
+    product = await Product.findById(req.params.id).populate(
+      "userId",
+      "username email"
+    ) 
+    .populate(
+      "categoryReference", "name description"
+    );
 
     res.status(200).json({ status: "success", data: product });
   } catch (error) {

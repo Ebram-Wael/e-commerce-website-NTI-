@@ -346,8 +346,10 @@ export const getCart = async (req, res) => {
       .json({ message: "Cart Uploaded Successfully", data: uploadedCart });
   } catch (error) {
     return res.status(500).json({
-      message: "Failed To Upload Cart Some Error Happen",
-    });
+      message:"Failed To Upload Cart Some Error Happen",
+      error: error.message
+    })
+
   }
 };
 
