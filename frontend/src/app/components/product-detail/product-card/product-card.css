@@ -1,0 +1,46 @@
+.product-card {
+  width: 220px;
+  padding: 12px;
+  margin: 8px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+  text-align: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  cursor: pointer;
+}
+
+.product-card:hover {
+  transform: scale(1.03);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+}
+
+.product-card img {
+  width: 100%;
+  height: 180px;
+  object-fit: contain;
+  margin-bottom: 10px;
+}
+
+.product-card h3 {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111;
+  min-height: 45px; /* keep height consistent */
+  margin-bottom: 6px;
+  line-height: 1.4;
+}
+
+.product-card p {
+  margin: 4px 0;
+  font-size: 14px;
+  color: #555;
+}
+
+.product-card .price {
+  font-size: 18px;
+  font-weight: bold;
+  color: #b12704; /* Amazon’s red price color */
+  margin-top: 8px;
+}

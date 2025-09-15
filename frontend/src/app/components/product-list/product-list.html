@@ -1,0 +1,7 @@
+<div class="carousel" role="list">
+  <article class="card" *ngFor="let p of products" role="listitem">
+    <a [routerLink]="['/products', p.id]">
+      <app-product-card [product]="p"></app-product-card>
+    </a>
+  </article>
+</div>

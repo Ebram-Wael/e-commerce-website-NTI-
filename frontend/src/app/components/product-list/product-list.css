@@ -1,0 +1,25 @@
+.carousel {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  gap: 12px;
+  padding: 20px;
+  scroll-behavior: smooth;
+}
+
+.carousel::-webkit-scrollbar {
+  height: 8px;
+}
+
+.carousel::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 10px;
+}
+
+.carousel::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+.card {
+  flex: 0 0 auto; /* prevent shrinking */
+}
