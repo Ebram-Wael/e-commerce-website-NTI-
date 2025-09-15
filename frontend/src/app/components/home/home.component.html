@@ -1,1 +1,101 @@
-<p>home works!</p>
+<header>
+  <div class="right-icons">
+    <button (click)="toggleMenu()" aria-label="Open menu">
+      <i class="fas fa-bars"></i>
+    </button>
+    <a routerLink="/search" aria-label="Search"><i class="fas fa-search"></i></a>
+  </div>
+  <div><i class="fa-solid fa-user" style="color: #e6edef;"></i></div>
+</header>
+
+<nav class="side-menu" [class.open]="menuOpen">
+  <button class="close-btn" (click)="closeMenu()" aria-label="Close menu">×</button>
+  <ul>
+    <li><a routerLink="/home" (click)="closeMenu()">Home</a></li>
+    <li (click)="closeMenu()">Log in</li>
+    <li (click)="closeMenu()">Sign up</li>
+    <li (click)="closeMenu()">Cart</li>
+    <li><a routerLink="/about" (click)="closeMenu()">About Us</a></li>
+    <li><a routerLink="/contact" (click)="closeMenu()">Contact Us</a></li>
+  </ul>
+</nav>
+
+<div class="overlay" *ngIf="menuOpen" (click)="closeMenu()"></div>
+
+<section class="hero-section">
+  <div class="circle circle-1"></div>
+  <div class="circle circle-2"></div>
+
+  <div class="hero-image">
+    <img src="assets/mainimage.jpg" alt="devices image" class="mainhero-image" />
+
+    <div class="spinning-icons">
+      <div class="icon-orbit"><i class="fa-solid fa-laptop"></i></div>
+      <div class="icon-orbit"><i class="fa-solid fa-tv"></i></div>
+      <div class="icon-orbit"><i class="fa-solid fa-headphones-simple"></i></div>
+      <div class="icon-orbit"><i class="fa-solid fa-keyboard"></i></div>
+      <div class="icon-orbit"><i class="fa-solid fa-computer-mouse"></i></div>
+      <div class="icon-orbit"><i class="fa-solid fa-computer"></i></div>
+    </div>
+  </div>
+
+  <div class="hero-content">
+    <h1>Welcome to <span>My Shop</span></h1>
+    <p>
+      Your premier destination for cutting-edge electronics. Discover our wide
+      range of smartphones, laptops, tablets, and smart devices at competitive
+      prices with exceptional warranty.Your premier destination for cutting-edge electronics. Discover our wide
+      range of smartphones, laptops, tablets, and smart devices at competitive
+      prices with exceptional warranty.
+    </p>
+  </div>
+</section>
+
+<!-- <section class="products-section">
+  <div class="section-title">
+    <h2>Our Premium Products</h2>
+  </div>
+
+  <div class="products-grid">
+    <div class="product-card" *ngFor="let product of [
+      {img:'assets/mac.jpg', name:'Mac', desc:'Powerful notebooks and desktops with Apple silicon.'},
+      {img:'assets/ipad.jpg', name:'iPad', desc:'Versatile tablets with stunning displays.'},
+      {img:'assets/iphone.jpg', name:'iPhone', desc:'The most advanced iPhone lineup.'},
+      {img:'assets/watch.jpg', name:'Apple Watch', desc:'The ultimate device for a healthy life.'},
+      {img:'assets/airpods.jpg', name:'AirPods', desc:'Magical wireless headphones.'},
+      {img:'assets/tv.jpg', name:'TV & Home', desc:'Elevate your entertainment with Apple TV.'},
+      {img:'assets/accessries.jpg', name:'Accessories', desc:'Cables, adapters, cases and more.'}
+    ]">
+      <div class="product-icon">
+        <img [src]="product.img" [alt]="product.name" />
+      </div>
+      <h3>{{ product.name }}</h3>
+      <p>{{ product.desc }}</p>
+    </div>
+  </div>
+</section>
+
+<h3>ABOUT US</h3>
+<section class="about-section">
+  <div class="about-content">
+    <p><span style="font-size:25px">Electronix</span> your trusted destination for genuine Apple products</p>
+    <p>
+      At Al Mostaqbal, we specialize in offering a wide selection of authentic
+      Apple devices, including iPhones, iPads, MacBooks, Apple Watches, and
+      accessories.
+    </p>
+    <ul>
+      <li>Fast and reliable shipping</li>
+      <li>Official warranty and after-sales support</li>
+      <li>Expert customer service</li>
+      <li>User-friendly online store</li>
+      <li>Multiple local branches</li>
+    </ul>
+    <a href="#" class="read-more-btn">Read More</a>
+  </div>
+  <div class="about-image">
+    <img src="assets/about.jpg" alt="About us" />
+  </div>
+</section> -->
+<h1 class="headline">Headphones</h1>
+<app-product-list></app-product-list>
