@@ -1,4 +1,4 @@
-<header>
+<!-- <header>
   <div class="right-icons">
     <button (click)="toggleMenu()" aria-label="Open menu">
       <i class="fas fa-bars"></i>
@@ -6,9 +6,9 @@
     <a routerLink="/search" aria-label="Search"><i class="fas fa-search"></i></a>
   </div>
   <div><i class="fa-solid fa-user" style="color: #e6edef;"></i></div>
-</header>
+</header> -->
 
-<nav class="side-menu" [class.open]="menuOpen">
+<!-- <nav class="side-menu" [class.open]="menuOpen">
   <button class="close-btn" (click)="closeMenu()" aria-label="Close menu">×</button>
   <ul>
     <li><a routerLink="/home" (click)="closeMenu()">Home</a></li>
@@ -18,7 +18,7 @@
     <li><a routerLink="/about" (click)="closeMenu()">About Us</a></li>
     <li><a routerLink="/contact" (click)="closeMenu()">Contact Us</a></li>
   </ul>
-</nav>
+</nav> -->
 
 <div class="overlay" *ngIf="menuOpen" (click)="closeMenu()"></div>
 
